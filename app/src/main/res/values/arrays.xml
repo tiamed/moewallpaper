@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string-array name="wallpapers" translatable="false">
+        <item>wallpaper_0</item>
+        <item>wallpaper_1</item>
+        <item>wallpaper_2</item>
+        <item>wallpaper_3</item>
+        <item>wallpaper_4</item>
+        <item>wallpaper_5</item>
+        <item>wallpaper_6</item>
+        <item>wallpaper_7</item>
+        <item>wallpaper_8</item>
+    </string-array>
+
+    <string-array name="info" translatable="false">
+        <item>春卷饭-into the dark</item>
+        <item>极上の腹</item>
+        <item>等しい朝</item>
+        <item>zero two and hiro</item>
+        <item>雨上JK</item>
+        <item>silver hair girl</item>
+        <item>02 flower</item>
+        <item>Ferocious Whale</item>
+        <item>osu! Spring Fanart 2018 - Evaine</item>
+    </string-array>
+</resources>
