@@ -1,9 +1,11 @@
-package info.tiamed.MoeWallpaper.views;
+package info.tiamed.MoeWallpaper.adapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,27 +18,34 @@ import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.activities.DetailActivity;
+import info.tiamed.MoeWallpaper.utils.getRes;
 
 public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.PaletteGridViewHolder> {
 
-    final int[] picResId = new int[]{R.drawable.wallpaper_0,R.drawable.wallpaper_1,
-            R.drawable.wallpaper_2,R.drawable.wallpaper_3,R.drawable.wallpaper_4,
-            R.drawable.wallpaper_5,R.drawable.wallpaper_6,R.drawable.wallpaper_7,
-            R.drawable.wallpaper_8};
+    private static Context mcontext;
+    ArrayList<Integer> mWallpapers = new ArrayList<Integer>();
+    String[] mWallpaperInfo;
+    private getRes getres;
+    private OnItemClickListener mOnItemClickListener = null;
 
+    public PaletteGridAdapter(Context mContext) {
+        setMcontext(mContext);
+        this.getres =  new getRes(getMcontext());
+        mWallpapers = getres.getmWallpapers();
+        mWallpaperInfo = getRes.getmWallpaperInfo();
+    }
 
+    public static Context getMcontext() {
+        return mcontext;
+    }
+
+    public static void setMcontext(Context mcontext) {
+        PaletteGridAdapter.mcontext = mcontext;
+    }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }
-
-    public static interface OnItemClickListener {
-        void onItemClick(View view , int position);
-    }
-
-    private OnItemClickListener mOnItemClickListener = null;
-
-    ArrayList<Integer> sWallpapers = new ArrayList<Integer>();
 
     @Override
     public PaletteGridViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -46,10 +55,10 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
                     //注意这里使用getTag方法获取position
-                    mOnItemClickListener.onItemClick(v,(int)v.getTag());
+                    Log.d("PaletteGrid on create", "item clicked :"+ v.getTag());
+                    int position = (int) v.getTag();
                     Intent detailIntent = new Intent(itemView.getContext(), DetailActivity.class);
-
-                    // Start the new activity
+                    detailIntent.putExtra("pos", position);
                     itemView.getContext().startActivity(detailIntent);
                 }
             }
@@ -59,7 +68,7 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
 
     @Override
     public void onBindViewHolder(final PaletteGridViewHolder holder, final int position) {
-        holder.mIvPic.setImageResource(picResId[position]);
+        holder.mIvPic.setImageResource(mWallpapers.get(position));
         BitmapDrawable bitmapDrawable = (BitmapDrawable) holder.mIvPic.getDrawable();
         Bitmap bitmap = bitmapDrawable.getBitmap();
         holder.itemView.setTag(position);
@@ -87,9 +96,7 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
                 int titleTextColor = swatch.getTitleTextColor();
                 int rgb = swatch.getRgb();
 
-                String[] names = holder.mIvPic.getContext().getResources().getStringArray(R.array.info);
-
-                holder.mTvTitle.setText(names[position]);
+                holder.mTvTitle.setText(mWallpaperInfo[position]);
                 holder.mTvTitle.setTextColor(titleTextColor);
                 holder.mTvTitle.setBackgroundColor(generateTransparentColor(0.5f, rgb));
 
@@ -108,7 +115,11 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
 
     @Override
     public int getItemCount() {
-        return picResId.length;
+        return mWallpapers.size();
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
     }
 
     class PaletteGridViewHolder extends RecyclerView.ViewHolder {
