@@ -5,6 +5,7 @@
     <string name="app_name">Moe Wallpapers</string>
     <string name="action_apply">Apply</string>
     <string name="applying">Applying selected wallpaper</string>
+    <string name="applied">Successfully applied wallpaper♥</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>

@@ -66,7 +66,7 @@ public class DetailActivity extends FragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(Menu.NONE, MENU_APPLY, 0, R.string.action_apply)
-                .setIcon(R.drawable.format_paint_white)
+                .setIcon(R.drawable.format_paint_black)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
         return super.onCreateOptionsMenu(menu);
     }

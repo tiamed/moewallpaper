@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class WallpaperLoader extends AsyncTask<Integer, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean success) {
         mDialog.dismiss();
+        Toast.makeText(mContext, mContext.getString(R.string.applied), Toast.LENGTH_SHORT).show();
         ((Activity) mContext).finish();
     }
 
