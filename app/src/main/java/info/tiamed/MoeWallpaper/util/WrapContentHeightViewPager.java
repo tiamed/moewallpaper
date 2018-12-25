@@ -1,4 +1,4 @@
-package info.tiamed.MoeWallpaper.utils;
+package info.tiamed.MoeWallpaper.util;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -1,4 +1,4 @@
-package info.tiamed.MoeWallpaper.activities;
+package info.tiamed.MoeWallpaper.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,9 +13,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener;
 import info.tiamed.MoeWallpaper.R;
-import info.tiamed.MoeWallpaper.utils.getRes;
-import info.tiamed.MoeWallpaper.adapters.SectionsPagerAdapter;
-import info.tiamed.MoeWallpaper.utils.WallpaperLoader;
+import info.tiamed.MoeWallpaper.util.getRes;
+import info.tiamed.MoeWallpaper.adapter.SectionsPagerAdapter;
+import info.tiamed.MoeWallpaper.util.WallpaperLoader;
 
 @SuppressLint("ParserError")
 public class DetailActivity extends FragmentActivity {

@@ -1,4 +1,4 @@
-package info.tiamed.MoeWallpaper.utils;
+package info.tiamed.MoeWallpaper.util;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

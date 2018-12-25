@@ -1,4 +1,4 @@
-package info.tiamed.MoeWallpaper.adapters;
+package info.tiamed.MoeWallpaper.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 import info.tiamed.MoeWallpaper.R;
-import info.tiamed.MoeWallpaper.activities.DetailActivity;
-import info.tiamed.MoeWallpaper.utils.getRes;
+import info.tiamed.MoeWallpaper.activity.DetailActivity;
+import info.tiamed.MoeWallpaper.util.getRes;
 
 public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.PaletteGridViewHolder> {
 

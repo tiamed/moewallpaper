@@ -1,4 +1,4 @@
-package info.tiamed.MoeWallpaper.fragments;
+package info.tiamed.MoeWallpaper.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 
 import androidx.fragment.app.Fragment;
-import info.tiamed.MoeWallpaper.utils.getRes;
+import info.tiamed.MoeWallpaper.util.getRes;
 
 public class WallpaperFragment extends Fragment {
     public static final String ARG_SECTION_NUMBER = "section_number";

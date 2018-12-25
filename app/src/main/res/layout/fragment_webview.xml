@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                    xmlns:app="http://schemas.android.com/apk/res-auto"
                                                    xmlns:tools="http://schemas.android.com/tools"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
                                                    tools:context="info.tiamed.MoeWallpaper.activity.MainActivity">
 
-    <TableLayout android:layout_width="match_parent" android:layout_height="wrap_content" />
-    <FrameLayout
-            android:id="@+id/fragment_layout" style="@style/fragment"/>
+    <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view"
 
-</RelativeLayout>
+            app:lottie_rawRes="@raw/servishero_loading"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true" style="@style/lottie_animation"/>
+    <WebView
+            android:id="@+id/webview" style="@style/webview"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
