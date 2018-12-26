@@ -36,4 +36,9 @@
         <item>ixy</item>
         <item>五番星</item>
     </string-array>
+
+    <string-array name="home_tabs">
+        <item>推荐</item>
+        <item>最新</item>
+    </string-array>
 </resources>

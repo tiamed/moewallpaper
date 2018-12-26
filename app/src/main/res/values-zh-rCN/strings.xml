@@ -6,6 +6,6 @@
     <string name="action_apply">应用</string>
     <string name="applying">正在应用壁纸&#8230;</string>
     <string name="applied">壁纸应用成功♥</string>
-
+    <string name="action_settings">设置</string>
 
 </resources>

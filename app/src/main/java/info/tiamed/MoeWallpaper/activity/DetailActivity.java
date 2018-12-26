@@ -5,21 +5,28 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.gyf.barlibrary.ImmersionBar;
 
 import java.util.ArrayList;
 
-import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import info.tiamed.MoeWallpaper.R;
-import info.tiamed.MoeWallpaper.util.getRes;
 import info.tiamed.MoeWallpaper.adapter.SectionsPagerAdapter;
 import info.tiamed.MoeWallpaper.util.WallpaperLoader;
+import info.tiamed.MoeWallpaper.util.getRes;
 
 @SuppressLint("ParserError")
-public class DetailActivity extends FragmentActivity {
+public class DetailActivity extends AppCompatActivity {
 
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
     private static final int MENU_APPLY = Menu.FIRST;
     private static Context mContext;
     private static ArrayList<Integer> mWallpapers;
@@ -34,7 +41,9 @@ public class DetailActivity extends FragmentActivity {
         position = getIntent().getIntExtra("pos", 0);
         Log.d("DetailActivity", "extra value position: " + position);
         super.onCreate(savedInstanceState);
+        ImmersionBar.with(this).init();
         setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
         getRes getRes = new getRes(this);
         this.mWallpapers = getRes.getmWallpapers();
         this.mWallpaperInfo = getRes.getmWallpaperInfo();
@@ -53,23 +62,15 @@ public class DetailActivity extends FragmentActivity {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case MENU_APPLY:
-                new WallpaperLoader(mContext, mWallpapers).execute(mCurrentFragment);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+    @OnClick(R.id.fab)
+    public void onClick() {
+        new WallpaperLoader(mContext, mWallpapers).execute(mCurrentFragment);
+        Log.d("FAB", "clicked");
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(Menu.NONE, MENU_APPLY, 0, R.string.action_apply)
-                .setIcon(R.drawable.format_paint_black)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-        return super.onCreateOptionsMenu(menu);
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
     }
-
-
 }

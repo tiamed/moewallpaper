@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/ivPic"
-        android:src="@drawable/wallpaper_0"
-        style="@style/ivpic" />
+        style="@style/ivpic"
+        android:src="@drawable/wallpaper_0" />
 
     <TextView
         android:id="@+id/tvTitle"
