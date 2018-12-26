@@ -1,6 +1,5 @@
 package info.tiamed.MoeWallpaper.util;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.WallpaperManager;
 import android.content.Context;
@@ -53,7 +52,6 @@ public class WallpaperLoader extends AsyncTask<Integer, Void, Boolean> {
     protected void onPostExecute(Boolean success) {
         mDialog.dismiss();
         Toast.makeText(mContext, mContext.getString(R.string.applied), Toast.LENGTH_SHORT).show();
-        ((Activity) mContext).finish();
     }
 
     @Override

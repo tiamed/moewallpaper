@@ -4,41 +4,72 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.gyf.barlibrary.ImmersionBar;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import info.tiamed.MoeWallpaper.R;
-import info.tiamed.MoeWallpaper.fragment.MainFragment;
 
-public class MainActivity extends AppCompatActivity {
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import butterknife.BindColor;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import info.tiamed.MoeWallpaper.R;
+import info.tiamed.MoeWallpaper.data.DataRequest;
+import info.tiamed.MoeWallpaper.data.sourceData;
+import info.tiamed.MoeWallpaper.fragment.MainFragment;
+import info.tiamed.MoeWallpaper.util.InternetConnection;
+
+public class MainActivity extends AppCompatActivity implements DataRequest.RequsetCallback<sourceData> {
 
 
     @BindView(R.id.search_view)
     MaterialSearchView searchView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindColor(R.color.colorPrimary)
+    int svColor;
+    @BindColor(R.color.colorPrimaryDark)
+    int pdColor;
+    int page = 1;
+    ArrayList<String> urls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ImmersionBar.with(this).init();
+        ImmersionBar.with(this)
+                .transparentNavigationBar()
+                .init();
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
+        if (InternetConnection.checkConnection(this)) {
+            DataRequest dr = new DataRequest();
+            dr.getWallpaperList(this, page);
+        }
+
         replaceFragment(new MainFragment());
+        initSearchView();
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         ImmersionBar.with(this).destroy();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        this.finish();
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -57,4 +88,50 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void initSearchView() {
+        toolbar.setLogo(null);
+        setSupportActionBar(toolbar);
+        searchView.setVoiceSearch(false);
+        searchView.setTextColor(pdColor);
+        searchView.setHintTextColor(pdColor);
+        searchView.setBackgroundColor(svColor);
+        searchView.setCursorDrawable(R.drawable.color_cursor_white);
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Snackbar.make(findViewById(R.id.container), "Query: " + query, Snackbar.LENGTH_LONG)
+                        .show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Do some magic
+                return false;
+            }
+        });
+
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                //Do some magic
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                //Do some magic
+            }
+        });
+    }
+
+    @Override
+    public void onFinish(List<sourceData> data) {
+        Log.e("source data", "" + data.get(0).getUrls().getThumb());
+        EventBus.getDefault().post(data);
+    }
+
+    @Override
+    public void onError(String msg) {
+        Log.e("source data", "failed");
+    }
 }

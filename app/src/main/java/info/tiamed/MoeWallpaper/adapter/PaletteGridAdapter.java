@@ -11,26 +11,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.activity.DetailActivity;
+import info.tiamed.MoeWallpaper.data.sourceData;
 import info.tiamed.MoeWallpaper.util.getRes;
-
-import java.util.ArrayList;
 
 public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.PaletteGridViewHolder> {
 
     private static Context mcontext;
+    List<sourceData> data;
     ArrayList<Integer> mWallpapers = new ArrayList<Integer>();
     String[] mWallpaperInfo;
     private getRes getres;
     private OnItemClickListener mOnItemClickListener = null;
+    private ArrayList<String> urls;
 
     public PaletteGridAdapter(Context mContext) {
         setMcontext(mContext);
         this.getres =  new getRes(getMcontext());
-        mWallpapers = getres.getmWallpapers();
+        mWallpapers = getRes.getmWallpapers();
         mWallpaperInfo = getRes.getmWallpaperInfo();
     }
 
@@ -66,7 +76,9 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
 
     @Override
     public void onBindViewHolder(final PaletteGridViewHolder holder, final int position) {
-        holder.mIvPic.setImageResource(mWallpapers.get(position));
+
+        Glide.with(holder.mIvPic.getContext()).load(urls.get(position)).into(holder.mIvPic);
+//        holder.mIvPic.setImageResource(mWallpapers.get(position));
         BitmapDrawable bitmapDrawable = (BitmapDrawable) holder.mIvPic.getDrawable();
         Bitmap bitmap = bitmapDrawable.getBitmap();
         holder.itemView.setTag(position);
@@ -119,6 +131,13 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
         void onItemClick(View view, int position);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPostEvent(List<sourceData> data) {
+        this.data = data;
+        data.forEach(sourceData -> urls.add(sourceData.getUrls().getThumb()));
+        Log.e("post event: ", ":" + urls.toString());
+    }
+
     class PaletteGridViewHolder extends RecyclerView.ViewHolder {
 
         ImageView mIvPic;
@@ -126,9 +145,10 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
 
         public PaletteGridViewHolder(View itemView) {
             super(itemView);
-            mIvPic = (ImageView) itemView.findViewById(R.id.ivPic);
-            mTvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+            mIvPic = itemView.findViewById(R.id.ivPic);
+            mTvTitle = itemView.findViewById(R.id.tvTitle);
         }
     }
+
 }
 

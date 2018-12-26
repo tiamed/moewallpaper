@@ -41,12 +41,14 @@ public class DetailActivity extends AppCompatActivity {
         position = getIntent().getIntExtra("pos", 0);
         Log.d("DetailActivity", "extra value position: " + position);
         super.onCreate(savedInstanceState);
-        ImmersionBar.with(this).init();
+        ImmersionBar.with(this)
+                .transparentNavigationBar()
+                .init();
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
         getRes getRes = new getRes(this);
-        this.mWallpapers = getRes.getmWallpapers();
-        this.mWallpaperInfo = getRes.getmWallpaperInfo();
+        mWallpapers = info.tiamed.MoeWallpaper.util.getRes.getmWallpapers();
+        this.mWallpaperInfo = info.tiamed.MoeWallpaper.util.getRes.getmWallpaperInfo();
         mContext = this;
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this.mWallpaperInfo);
         mViewPager = findViewById(R.id.pager);
