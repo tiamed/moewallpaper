@@ -11,14 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.activity.DetailActivity;
 import info.tiamed.MoeWallpaper.util.getRes;
+
+import java.util.ArrayList;
 
 public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.PaletteGridViewHolder> {
 
@@ -54,7 +53,6 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
             @Override
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
-                    //注意这里使用getTag方法获取position
                     Log.d("PaletteGrid on create", "item clicked :"+ v.getTag());
                     int position = (int) v.getTag();
                     Intent detailIntent = new Intent(itemView.getContext(), DetailActivity.class);
@@ -76,7 +74,6 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
             @Override
             public void onGenerated(Palette palette) {
-                // 对于一张图片，它可能分析不出来暗、亮色，返回值为空，我这里采取的方案是当获取不到色调样品，则获取其他色调样品。
                 Palette.Swatch swatch = palette.getDarkMutedSwatch();
                 if (swatch == null) {
                     swatch = palette.getDarkVibrantSwatch();
