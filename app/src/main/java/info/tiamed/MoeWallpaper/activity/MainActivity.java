@@ -4,16 +4,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.google.android.material.snackbar.Snackbar;
-import com.gyf.barlibrary.ImmersionBar;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
-
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -21,11 +11,18 @@ import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.gyf.barlibrary.ImmersionBar;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.data.DataRequest;
 import info.tiamed.MoeWallpaper.data.sourceData;
 import info.tiamed.MoeWallpaper.fragment.MainFragment;
 import info.tiamed.MoeWallpaper.util.InternetConnection;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements DataRequest.RequsetCallback<sourceData> {
 
@@ -39,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
     @BindColor(R.color.colorPrimaryDark)
     int pdColor;
     int page = 1;
-    ArrayList<String> urls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
         MenuItem item = menu.findItem(R.id.action_search);
         searchView.setMenuItem(item);
         Log.d("Menu", "Creating search view");
-
         return true;
     }
 
@@ -99,14 +94,15 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Snackbar.make(findViewById(R.id.container), "Query: " + query, Snackbar.LENGTH_LONG)
-                        .show();
+                if (InternetConnection.checkConnection(MainActivity.this)) {
+                    DataRequest dr = new DataRequest();
+                    dr.searchList(MainActivity.this, query, page);
+                }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //Do some magic
                 return false;
             }
         });
@@ -114,24 +110,29 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
         searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
             public void onSearchViewShown() {
-                //Do some magic
             }
 
             @Override
             public void onSearchViewClosed() {
-                //Do some magic
+                if (InternetConnection.checkConnection(MainActivity.this)) {
+                    DataRequest dr = new DataRequest();
+                    dr.getWallpaperList(MainActivity.this, page);
+                }
             }
         });
     }
 
     @Override
     public void onFinish(List<sourceData> data) {
-        Log.e("source data", "" + data.get(0).getUrls().getThumb());
         EventBus.getDefault().post(data);
     }
 
     @Override
     public void onError(String msg) {
         Log.e("source data", "failed");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPostEvent(List<sourceData> data) {
     }
 }

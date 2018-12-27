@@ -11,34 +11,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.activity.DetailActivity;
-import info.tiamed.MoeWallpaper.data.sourceData;
 import info.tiamed.MoeWallpaper.util.getRes;
+
+import java.util.ArrayList;
 
 public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.PaletteGridViewHolder> {
 
     private static Context mcontext;
-    List<sourceData> data;
     ArrayList<Integer> mWallpapers = new ArrayList<Integer>();
     String[] mWallpaperInfo;
     private getRes getres;
     private OnItemClickListener mOnItemClickListener = null;
     private ArrayList<String> urls;
+    private ArrayList<String> titles;
 
-    public PaletteGridAdapter(Context mContext) {
+    public PaletteGridAdapter(Context mContext, ArrayList<String> urls, ArrayList<String> titles) {
         setMcontext(mContext);
+        this.urls = urls;
+        this.titles = titles;
         this.getres =  new getRes(getMcontext());
         mWallpapers = getRes.getmWallpapers();
         mWallpaperInfo = getRes.getmWallpaperInfo();
@@ -77,8 +72,35 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
     @Override
     public void onBindViewHolder(final PaletteGridViewHolder holder, final int position) {
 
-        Glide.with(holder.mIvPic.getContext()).load(urls.get(position)).into(holder.mIvPic);
-//        holder.mIvPic.setImageResource(mWallpapers.get(position));
+        if (urls.size() != 0) {
+            Glide.with(holder.mIvPic.getContext()).load(urls.get(position)).into(holder.mIvPic);
+            holder.mTvTitle.setText(titles.get(position));
+        } else {
+            holder.mIvPic.setImageResource(mWallpapers.get(position));
+            holder.mTvTitle.setText(mWallpaperInfo[position]);
+        }
+
+        if (holder.mIvPic.getDrawable() != null) {
+            setPalette(holder, position);
+        }
+
+    }
+
+    private int generateTransparentColor(float percent, int rgb) {
+        int red = Color.red(rgb);
+        int green = Color.green(rgb);
+        int blue = Color.blue(rgb);
+        int alpha = Color.alpha(rgb);
+        alpha = (int) (percent * alpha);
+        return Color.argb(alpha, red, green, blue);
+    }
+
+    @Override
+    public int getItemCount() {
+        return urls.size();
+    }
+
+    private void setPalette(final PaletteGridViewHolder holder, final int position) {
         BitmapDrawable bitmapDrawable = (BitmapDrawable) holder.mIvPic.getDrawable();
         Bitmap bitmap = bitmapDrawable.getBitmap();
         holder.itemView.setTag(position);
@@ -105,7 +127,6 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
                 int titleTextColor = swatch.getTitleTextColor();
                 int rgb = swatch.getRgb();
 
-                holder.mTvTitle.setText(mWallpaperInfo[position]);
                 holder.mTvTitle.setTextColor(titleTextColor);
                 holder.mTvTitle.setBackgroundColor(generateTransparentColor(0.5f, rgb));
 
@@ -113,29 +134,8 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
         });
     }
 
-    private int generateTransparentColor(float percent, int rgb) {
-        int red = Color.red(rgb);
-        int green = Color.green(rgb);
-        int blue = Color.blue(rgb);
-        int alpha = Color.alpha(rgb);
-        alpha = (int) (percent * alpha);
-        return Color.argb(alpha, red, green, blue);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mWallpapers.size();
-    }
-
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPostEvent(List<sourceData> data) {
-        this.data = data;
-        data.forEach(sourceData -> urls.add(sourceData.getUrls().getThumb()));
-        Log.e("post event: ", ":" + urls.toString());
     }
 
     class PaletteGridViewHolder extends RecyclerView.ViewHolder {

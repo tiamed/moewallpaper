@@ -1,12 +1,12 @@
 package info.tiamed.MoeWallpaper.data;
 
-import java.io.IOException;
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import java.io.IOException;
+import java.util.List;
 
 public class DataRequest {
     public static final String baseurl = "https://api.unsplash.com/";
@@ -18,7 +18,17 @@ public class DataRequest {
 
     public void getWallpaperList(final RequsetCallback requsetCallback, int page) {
         ApiService mApiService = retro.create(ApiService.class);
-        Call<List<sourceData>> mCall = mApiService.getData(client_id, page);
+        Call<List<sourceData>> mCall = mApiService.getData(client_id, page, 30, "popular");
+        get(requsetCallback, mCall);
+    }
+
+    public void searchList(final RequsetCallback requsetCallback, String query, int page) {
+        ApiService mApiService = retro.create(ApiService.class);
+        Call<List<searchData>> mCall = mApiService.searchData(client_id, page, 30, query);
+        search(requsetCallback, mCall);
+    }
+
+    private void get(RequsetCallback requsetCallback, Call<List<sourceData>> mCall) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -36,11 +46,31 @@ public class DataRequest {
         }).start();
     }
 
+    private void search(RequsetCallback requsetCallback, Call<List<searchData>> mCall) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response<List<searchData>> response = mCall.execute();
+                    if (response.isSuccessful() && response.body() != null) {
+                        requsetCallback.onFinish(response.body());
+                    } else {
+                        requsetCallback.onError("error");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     public interface RequsetCallback<T> {
         void onFinish(List<T> data);
 
         void onError(String msg);
     }
+
+
 
 
 }
