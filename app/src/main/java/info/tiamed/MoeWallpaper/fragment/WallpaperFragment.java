@@ -7,11 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
-import info.tiamed.MoeWallpaper.util.getRes;
 
 import java.util.ArrayList;
+
+import androidx.fragment.app.Fragment;
 
 public class WallpaperFragment extends Fragment {
     public static final String ARG_SECTION_NUMBER = "section_number";
@@ -22,7 +23,6 @@ public class WallpaperFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         mContext = getActivity();
-        getRes getres = new getRes(mContext);
         Bundle args = getArguments();
         int position = args.getInt(ARG_SECTION_NUMBER);
         ArrayList<String> urls = args.getStringArrayList("urls");

@@ -11,21 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.palette.graphics.Palette;
-import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import info.tiamed.MoeWallpaper.R;
-import info.tiamed.MoeWallpaper.activity.DetailActivity;
-import info.tiamed.MoeWallpaper.util.getRes;
 
 import java.util.ArrayList;
+
+import androidx.palette.graphics.Palette;
+import androidx.recyclerview.widget.RecyclerView;
+import info.tiamed.MoeWallpaper.R;
+import info.tiamed.MoeWallpaper.activity.DetailActivity;
 
 public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.PaletteGridViewHolder> {
 
     private static Context mcontext;
-    ArrayList<Integer> mWallpapers = new ArrayList<Integer>();
-    String[] mWallpaperInfo;
-    private getRes getres;
     private OnItemClickListener mOnItemClickListener = null;
     private ArrayList<String> urls;
     private ArrayList<String> titles;
@@ -34,9 +32,7 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
         setMcontext(mContext);
         this.urls = urls;
         this.titles = titles;
-        this.getres =  new getRes(getMcontext());
-        mWallpapers = getRes.getmWallpapers();
-        mWallpaperInfo = getRes.getmWallpaperInfo();
+//        EventBus.getDefault().register(this);
     }
 
     public static Context getMcontext() {
@@ -77,9 +73,6 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
         if (urls.size() != 0) {
             Glide.with(holder.mIvPic.getContext()).load(urls.get(position)).into(holder.mIvPic);
             holder.mTvTitle.setText(titles.get(position));
-        } else {
-            holder.mIvPic.setImageResource(mWallpapers.get(position));
-            holder.mTvTitle.setText(mWallpaperInfo[position]);
         }
 
         if (holder.mIvPic.getDrawable() != null) {

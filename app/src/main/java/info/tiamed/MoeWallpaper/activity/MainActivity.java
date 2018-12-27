@@ -4,22 +4,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import butterknife.BindColor;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.gyf.barlibrary.ImmersionBar;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import info.tiamed.MoeWallpaper.R;
-import info.tiamed.MoeWallpaper.data.DataRequest;
-import info.tiamed.MoeWallpaper.data.searchData;
-import info.tiamed.MoeWallpaper.data.sourceData;
-import info.tiamed.MoeWallpaper.fragment.GalleryFragment;
-import info.tiamed.MoeWallpaper.fragment.MainFragment;
-import info.tiamed.MoeWallpaper.util.InternetConnection;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -27,7 +15,22 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements DataRequest.RequsetCallback<sourceData> {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import butterknife.BindColor;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import info.tiamed.MoeWallpaper.R;
+import info.tiamed.MoeWallpaper.data.DataRequest;
+import info.tiamed.MoeWallpaper.data.SearchData;
+import info.tiamed.MoeWallpaper.data.SourceData;
+import info.tiamed.MoeWallpaper.fragment.GalleryFragment;
+import info.tiamed.MoeWallpaper.fragment.MainFragment;
+import info.tiamed.MoeWallpaper.util.InternetConnection;
+
+public class MainActivity extends AppCompatActivity implements DataRequest.RequsetCallback<SourceData> {
 
 
     @BindView(R.id.search_view)
@@ -51,10 +54,7 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        if (InternetConnection.checkConnection(this)) {
-            DataRequest dr = new DataRequest();
-            dr.getWallpaperList(this, page);
-        }
+        getList();
 
         replaceFragment(new MainFragment());
         initSearchView();
@@ -120,16 +120,20 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
 
             @Override
             public void onSearchViewClosed() {
-                if (InternetConnection.checkConnection(MainActivity.this)) {
-                    DataRequest dr = new DataRequest();
-                    dr.getWallpaperList(MainActivity.this, page);
-                }
+                getList();
             }
         });
     }
 
+    public void getList() {
+        if (InternetConnection.checkConnection(this)) {
+            DataRequest dr = new DataRequest();
+            dr.getWallpaperList(this, page);
+        }
+    }
+
     @Override
-    public void onFinish(List<sourceData> data, List<searchData.ResultsBean> search) {
+    public void onFinish(List<SourceData> data, List<SearchData.ResultsBean> search) {
         if (data != null) {
             data.forEach(datum -> urls.add(datum.getUrls().getRegular()));
             data.forEach(datum -> titles.add(datum.getUser().getUsername()));

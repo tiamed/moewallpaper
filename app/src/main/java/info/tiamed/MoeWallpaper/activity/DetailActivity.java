@@ -5,19 +5,21 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.gyf.barlibrary.ImmersionBar;
+
+import java.util.ArrayList;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.gyf.barlibrary.ImmersionBar;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.adapter.SectionsPagerAdapter;
 import info.tiamed.MoeWallpaper.util.WallpaperLoader;
-
-import java.util.ArrayList;
 
 @SuppressLint("ParserError")
 public class DetailActivity extends AppCompatActivity {
@@ -26,10 +28,8 @@ public class DetailActivity extends AppCompatActivity {
     FloatingActionButton fab;
     private static final int MENU_APPLY = Menu.FIRST;
     private static Context mContext;
-    private static ArrayList<Integer> mWallpapers;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
-    String[] mWallpaperInfo;
     private int mCurrentFragment;
     private int position;
     ArrayList<String> urls = new ArrayList<>();
@@ -37,9 +37,9 @@ public class DetailActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        position = getIntent().getIntExtra("pos", 0);
-        urls = getIntent().getStringArrayListExtra("urls");
-        titles = getIntent().getStringArrayListExtra("titles");
+        this.position = getIntent().getIntExtra("pos", 0);
+        this.urls = getIntent().getStringArrayListExtra("urls");
+        this.titles = getIntent().getStringArrayListExtra("titles");
         Log.d("DetailActivity", "extra value position: " + position);
         super.onCreate(savedInstanceState);
         ImmersionBar.with(this)
@@ -47,9 +47,6 @@ public class DetailActivity extends AppCompatActivity {
                 .init();
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-//        getRes getRes = new getRes(this);
-//        mWallpapers = info.tiamed.MoeWallpaper.util.getRes.getmWallpapers();
-//        this.mWallpaperInfo = info.tiamed.MoeWallpaper.util.getRes.getmWallpaperInfo();
         mContext = this;
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), urls, titles);
         mViewPager = findViewById(R.id.pager);

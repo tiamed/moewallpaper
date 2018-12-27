@@ -1,12 +1,14 @@
 package info.tiamed.MoeWallpaper.data;
 
+import android.util.Log;
+
+import java.util.List;
+
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.io.IOException;
-import java.util.List;
 
 public class DataRequest {
     public static final String baseurl = "https://api.unsplash.com/";
@@ -18,54 +20,55 @@ public class DataRequest {
 
     public void getWallpaperList(final RequsetCallback requsetCallback, int page) {
         ApiService mApiService = retro.create(ApiService.class);
-        Call<List<sourceData>> mCall = mApiService.getData(client_id, page, 30, "popular");
+        Call<List<SourceData>> mCall = mApiService.getData(client_id, page, 30, "popular");
         get(requsetCallback, mCall);
     }
 
     public void searchList(final RequsetCallback requsetCallback, String query, int page) {
         ApiService mApiService = retro.create(ApiService.class);
-        Call<searchData> mCall = mApiService.searchData(client_id, page, 30, query);
+        Call<SearchData> mCall = mApiService.searchData(client_id, page, 30, query);
         search(requsetCallback, mCall);
     }
 
-    private void get(RequsetCallback requsetCallback, Call<List<sourceData>> mCall) {
-        new Thread(new Runnable() {
+    private void get(RequsetCallback requsetCallback, Call<List<SourceData>> mCall) {
+        mCall.enqueue(new Callback<List<SourceData>>() {
             @Override
-            public void run() {
-                try {
-                    Response<List<sourceData>> response = mCall.execute();
-                    if (response.isSuccessful() && response.body() != null) {
-                        requsetCallback.onFinish(response.body(), null);
-                    } else {
-                        requsetCallback.onError("error");
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+            public void onResponse(Call<List<SourceData>> call, Response<List<SourceData>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    requsetCallback.onFinish(response.body(), null);
+                } else {
+                    requsetCallback.onError("error");
                 }
             }
-        }).start();
+
+            @Override
+            public void onFailure(Call<List<SourceData>> call, Throwable t) {
+                Log.e("DataRequest", "Failed");
+            }
+        });
     }
 
-    private void search(RequsetCallback requsetCallback, Call<searchData> mCall) {
-        new Thread(new Runnable() {
+    private void search(RequsetCallback requsetCallback, Call<SearchData> mCall) {
+        mCall.enqueue(new Callback<SearchData>() {
             @Override
-            public void run() {
-                try {
-                    Response<searchData> response = mCall.execute();
-                    if (response.isSuccessful() && response.body() != null) {
-                        requsetCallback.onFinish(null, response.body().getResults());
-                    } else {
-                        requsetCallback.onError("error");
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+            public void onResponse(Call<SearchData> call, Response<SearchData> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    requsetCallback.onFinish(null, response.body().getResults());
+                } else {
+                    requsetCallback.onError("error");
                 }
             }
-        }).start();
+
+            @Override
+            public void onFailure(Call<SearchData> call, Throwable t) {
+                Log.e("data request", "failed");
+            }
+        });
+
     }
 
     public interface RequsetCallback<T> {
-        void onFinish(List<sourceData> data, List<searchData.ResultsBean> search);
+        void onFinish(List<SourceData> data, List<SearchData.ResultsBean> search);
 
         void onError(String msg);
     }

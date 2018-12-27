@@ -6,6 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -13,11 +20,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.adapter.PaletteGridAdapter;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
 
 public class GalleryFragment extends Fragment {
 
@@ -34,7 +36,7 @@ public class GalleryFragment extends Fragment {
         EventBus.getDefault().register(this);
         mContext = getActivity();
         mImageRecycler = galleryView.findViewById(R.id.gallery_item);
-        View loadMore = galleryView.findViewById(R.id.load_more);
+//        View loadMore = galleryView.findViewById(R.id.load_more);
         mPaletteGridAdapter = new PaletteGridAdapter(getActivity(), urls, titles);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 2);
         mImageRecycler.setLayoutManager(gridLayoutManager);
@@ -59,10 +61,10 @@ public class GalleryFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPostEvent(Bundle bundle) {
-        urls.clear();
-        titles.clear();
-        urls = bundle.getStringArrayList("urls");
-        titles = bundle.getStringArrayList("titles");
+        this.urls.clear();
+        this.titles.clear();
+        this.urls = bundle.getStringArrayList("urls");
+        this.titles = bundle.getStringArrayList("titles");
         mPaletteGridAdapter.notifyDataSetChanged();
     }
 }

@@ -5,8 +5,7 @@
 
     <ImageView
         android:id="@+id/ivPic"
-        style="@style/ivpic"
-        android:src="@drawable/wallpaper_0" />
+        style="@style/ivpic" />
 
     <RelativeLayout
         android:layout_width="match_parent"
