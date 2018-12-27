@@ -15,13 +15,16 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.data.DataRequest;
+import info.tiamed.MoeWallpaper.data.searchData;
 import info.tiamed.MoeWallpaper.data.sourceData;
+import info.tiamed.MoeWallpaper.fragment.GalleryFragment;
 import info.tiamed.MoeWallpaper.fragment.MainFragment;
 import info.tiamed.MoeWallpaper.util.InternetConnection;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements DataRequest.RequsetCallback<sourceData> {
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
     @BindColor(R.color.colorPrimaryDark)
     int pdColor;
     int page = 1;
+    ArrayList<String> urls = new ArrayList<>();
+    ArrayList<String> titles = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (InternetConnection.checkConnection(MainActivity.this)) {
+                    replaceFragment(new GalleryFragment());
                     DataRequest dr = new DataRequest();
                     dr.searchList(MainActivity.this, query, page);
                 }
@@ -123,8 +129,18 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
     }
 
     @Override
-    public void onFinish(List<sourceData> data) {
-        EventBus.getDefault().post(data);
+    public void onFinish(List<sourceData> data, List<searchData.ResultsBean> search) {
+        if (data != null) {
+            data.forEach(datum -> urls.add(datum.getUrls().getRegular()));
+            data.forEach(datum -> titles.add(datum.getUser().getUsername()));
+        } else if (search != null) {
+            search.forEach(result -> urls.add(result.getUrls().getRegular()));
+            search.forEach(result -> titles.add(result.getUser().getUsername()));
+        }
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("urls", urls);
+        bundle.putStringArrayList("titles", titles);
+        EventBus.getDefault().post(bundle);
     }
 
     @Override
@@ -133,6 +149,6 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPostEvent(List<sourceData> data) {
+    public void onPostEvent(Bundle bundle) {
     }
 }

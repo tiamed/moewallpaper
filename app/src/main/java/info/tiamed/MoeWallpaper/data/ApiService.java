@@ -11,5 +11,5 @@ public interface ApiService {
     Call<List<sourceData>> getData(@Query("client_id") String client_id, @Query("page") int page, @Query("per_page") int per, @Query("order_by") String order);
 
     @GET("search/photos")
-    Call<List<searchData>> searchData(@Query("client_id") String client_id, @Query("page") int page, @Query("per_page") int per, @Query("query") String query);
+    Call<searchData> searchData(@Query("client_id") String client_id, @Query("page") int page, @Query("per_page") int per, @Query("query") String query);
 }

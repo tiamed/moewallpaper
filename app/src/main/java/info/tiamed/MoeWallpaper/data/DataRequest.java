@@ -24,7 +24,7 @@ public class DataRequest {
 
     public void searchList(final RequsetCallback requsetCallback, String query, int page) {
         ApiService mApiService = retro.create(ApiService.class);
-        Call<List<searchData>> mCall = mApiService.searchData(client_id, page, 30, query);
+        Call<searchData> mCall = mApiService.searchData(client_id, page, 30, query);
         search(requsetCallback, mCall);
     }
 
@@ -35,7 +35,7 @@ public class DataRequest {
                 try {
                     Response<List<sourceData>> response = mCall.execute();
                     if (response.isSuccessful() && response.body() != null) {
-                        requsetCallback.onFinish(response.body());
+                        requsetCallback.onFinish(response.body(), null);
                     } else {
                         requsetCallback.onError("error");
                     }
@@ -46,14 +46,14 @@ public class DataRequest {
         }).start();
     }
 
-    private void search(RequsetCallback requsetCallback, Call<List<searchData>> mCall) {
+    private void search(RequsetCallback requsetCallback, Call<searchData> mCall) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Response<List<searchData>> response = mCall.execute();
+                    Response<searchData> response = mCall.execute();
                     if (response.isSuccessful() && response.body() != null) {
-                        requsetCallback.onFinish(response.body());
+                        requsetCallback.onFinish(null, response.body().getResults());
                     } else {
                         requsetCallback.onError("error");
                     }
@@ -65,7 +65,7 @@ public class DataRequest {
     }
 
     public interface RequsetCallback<T> {
-        void onFinish(List<T> data);
+        void onFinish(List<sourceData> data, List<searchData.ResultsBean> search);
 
         void onError(String msg);
     }

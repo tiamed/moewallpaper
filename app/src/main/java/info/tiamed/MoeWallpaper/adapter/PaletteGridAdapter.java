@@ -61,7 +61,9 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
                     Log.d("PaletteGrid on create", "item clicked :"+ v.getTag());
                     int position = (int) v.getTag();
                     Intent detailIntent = new Intent(itemView.getContext(), DetailActivity.class);
-                    detailIntent.putExtra("pos", position);
+                    detailIntent.putExtra("pos", position)
+                            .putExtra("urls", urls)
+                            .putExtra("titles", titles);
                     itemView.getContext().startActivity(detailIntent);
                 }
             }

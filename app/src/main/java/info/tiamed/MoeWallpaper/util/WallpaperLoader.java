@@ -7,32 +7,31 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.Toast;
+import com.bumptech.glide.Glide;
+import info.tiamed.MoeWallpaper.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-import info.tiamed.MoeWallpaper.R;
 
 public class WallpaperLoader extends AsyncTask<Integer, Void, Boolean> {
     BitmapFactory.Options mOptions;
     ProgressDialog mDialog;
     private Context mContext;
-    private ArrayList<Integer> sWallpapers;
+    private ArrayList<String> urls;
 
-    public WallpaperLoader(Context mContext, ArrayList<Integer> sWallpapers) {
+    public WallpaperLoader(Context mContext, ArrayList<String> urls) {
         mOptions = new BitmapFactory.Options();
         mOptions.inDither = false;
         mOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
         this.mContext = mContext;
-        this.sWallpapers = sWallpapers;
+        this.urls = urls;
     }
 
     @Override
     protected Boolean doInBackground(Integer... params) {
         try {
-            Bitmap b = BitmapFactory.decodeResource(mContext.getResources(),
-                    sWallpapers.get(params[0]), mOptions);
-
+            Bitmap b = Glide.with(mContext).asBitmap().load(urls.get(params[0])).submit().get();
+            b = b.copy(Bitmap.Config.ARGB_8888, true);
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(mContext);
             try {
                 wallpaperManager.setBitmap(b);
@@ -44,6 +43,9 @@ public class WallpaperLoader extends AsyncTask<Integer, Void, Boolean> {
         } catch (OutOfMemoryError e) {
             return false;
         } catch (NullPointerException e) {
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }

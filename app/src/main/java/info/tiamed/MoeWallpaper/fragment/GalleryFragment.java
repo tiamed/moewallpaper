@@ -13,13 +13,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.adapter.PaletteGridAdapter;
-import info.tiamed.MoeWallpaper.data.sourceData;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GalleryFragment extends Fragment {
 
@@ -60,9 +58,11 @@ public class GalleryFragment extends Fragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPostEvent(List<sourceData> data) {
-        data.forEach(sourceData -> urls.add(sourceData.getUrls().getRegular()));
-        data.forEach(sourceData -> titles.add(sourceData.getUser().getUsername()));
+    public void onPostEvent(Bundle bundle) {
+        urls.clear();
+        titles.clear();
+        urls = bundle.getStringArrayList("urls");
+        titles = bundle.getStringArrayList("titles");
         mPaletteGridAdapter.notifyDataSetChanged();
     }
 }
