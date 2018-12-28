@@ -129,6 +129,13 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
         });
     }
 
+    public void setData(ArrayList<String> urls, ArrayList<String> titles) {
+        this.urls.clear();
+        this.titles.clear();
+        this.urls = urls;
+        this.titles = titles;
+    }
+
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }

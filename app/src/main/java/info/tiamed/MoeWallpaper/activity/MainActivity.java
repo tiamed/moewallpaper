@@ -135,10 +135,10 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
     @Override
     public void onFinish(List<SourceData> data, List<SearchData.ResultsBean> search) {
         if (data != null) {
-            data.forEach(datum -> urls.add(datum.getUrls().getRegular()));
+            data.forEach(datum -> urls.add(datum.getUrls().getThumb()));
             data.forEach(datum -> titles.add(datum.getUser().getUsername()));
         } else if (search != null) {
-            search.forEach(result -> urls.add(result.getUrls().getRegular()));
+            search.forEach(result -> urls.add(result.getUrls().getThumb()));
             search.forEach(result -> titles.add(result.getUser().getUsername()));
         }
         Bundle bundle = new Bundle();

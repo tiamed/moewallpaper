@@ -2,10 +2,14 @@ package info.tiamed.MoeWallpaper.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.github.nukc.LoadMoreWrapper.LoadMoreAdapter;
+import com.github.nukc.LoadMoreWrapper.LoadMoreWrapper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -36,21 +40,20 @@ public class GalleryFragment extends Fragment {
         EventBus.getDefault().register(this);
         mContext = getActivity();
         mImageRecycler = galleryView.findViewById(R.id.gallery_item);
-//        View loadMore = galleryView.findViewById(R.id.load_more);
         mPaletteGridAdapter = new PaletteGridAdapter(getActivity(), urls, titles);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 2);
         mImageRecycler.setLayoutManager(gridLayoutManager);
         mImageRecycler.setOnTouchListener((v, event) -> {return false; });
         mImageRecycler.setAdapter(mPaletteGridAdapter);
-//        LoadMoreWrapper.with(mPaletteGridAdapter)
-//                .setFooterView(loadMore)
-//                .setListener(new LoadMoreAdapter.OnLoadMoreListener() {
-//                    @Override
-//                    public void onLoadMore(LoadMoreAdapter.Enabled enabled) {
-//
-//                    }
-//                    })
-//                            .into(mImageRecycler);
+        LoadMoreWrapper.with(mPaletteGridAdapter)
+                .setFooterView(R.layout.view_footer)
+                .setListener(new LoadMoreAdapter.OnLoadMoreListener() {
+                    @Override
+                    public void onLoadMore(LoadMoreAdapter.Enabled enabled) {
+
+                    }
+                })
+                .into(mImageRecycler);
         mPaletteGridAdapter.setOnItemClickListener((View view, int position) -> {
             Toast.makeText(getActivity(), position, Toast.LENGTH_LONG).show();
         });
@@ -61,10 +64,10 @@ public class GalleryFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPostEvent(Bundle bundle) {
-        this.urls.clear();
-        this.titles.clear();
-        this.urls = bundle.getStringArrayList("urls");
-        this.titles = bundle.getStringArrayList("titles");
+        ArrayList<String> urls = bundle.getStringArrayList("urls");
+        ArrayList<String> titles = bundle.getStringArrayList("titles");
+        mPaletteGridAdapter.setData(urls, titles);
+        Log.e("GalleryFragment", urls.toString());
         mPaletteGridAdapter.notifyDataSetChanged();
     }
 }

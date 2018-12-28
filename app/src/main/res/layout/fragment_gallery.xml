@@ -7,11 +7,4 @@
         android:id="@+id/gallery_item"
         style="@style/gallery_item" />
 
-    <FrameLayout
-        android:id="@+id/load_more"
-        android:layout_width="match_parent"
-        android:layout_height="24dp">
-
-    </FrameLayout>
-
 </RelativeLayout>
