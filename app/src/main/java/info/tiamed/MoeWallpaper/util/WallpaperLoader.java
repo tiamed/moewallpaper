@@ -8,14 +8,16 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import info.tiamed.MoeWallpaper.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import info.tiamed.MoeWallpaper.R;
 
 public class WallpaperLoader extends AsyncTask<Integer, Void, Boolean> {
     BitmapFactory.Options mOptions;

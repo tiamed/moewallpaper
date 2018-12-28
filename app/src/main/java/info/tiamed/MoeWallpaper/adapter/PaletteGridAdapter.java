@@ -11,24 +11,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.palette.graphics.Palette;
-import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import info.tiamed.MoeWallpaper.R;
-import info.tiamed.MoeWallpaper.activity.DetailActivity;
 
 import java.util.ArrayList;
+
+import androidx.palette.graphics.Palette;
+import androidx.recyclerview.widget.RecyclerView;
+import info.tiamed.MoeWallpaper.R;
+import info.tiamed.MoeWallpaper.activity.DetailActivity;
 
 public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.PaletteGridViewHolder> {
 
     private static Context mcontext;
     private OnItemClickListener mOnItemClickListener = null;
+    private ArrayList<String> urls_thumb;
     private ArrayList<String> urls;
     private ArrayList<String> titles;
 
-    public PaletteGridAdapter(Context mContext, ArrayList<String> urls, ArrayList<String> titles) {
+    public PaletteGridAdapter(Context mContext, ArrayList<String> urls_thumb, ArrayList<String> urls, ArrayList<String> titles) {
         setMcontext(mContext);
         this.urls = urls;
+        this.urls_thumb = urls_thumb;
         this.titles = titles;
 //        EventBus.getDefault().register(this);
     }
@@ -70,8 +74,8 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
     @Override
     public void onBindViewHolder(final PaletteGridViewHolder holder, final int position) {
 
-        if (urls.size() != 0) {
-            Glide.with(holder.mIvPic.getContext()).load(urls.get(position)).into(holder.mIvPic);
+        if (urls_thumb.size() != 0) {
+            Glide.with(holder.mIvPic.getContext()).load(urls_thumb.get(position)).into(holder.mIvPic);
             holder.mTvTitle.setText(titles.get(position));
         }
 
@@ -129,8 +133,9 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
         });
     }
 
-    public void setData(ArrayList<String> urls, ArrayList<String> titles) {
+    public void setData(ArrayList<String> urls_thumb, ArrayList<String> urls, ArrayList<String> titles) {
         this.urls = urls;
+        this.urls_thumb = urls_thumb;
         this.titles = titles;
     }
 

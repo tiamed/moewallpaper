@@ -1,9 +1,15 @@
 package info.tiamed.MoeWallpaper.data;
 
+import android.os.Bundle;
 import android.util.Log;
-import info.tiamed.MoeWallpaper.util.HttpUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
+
+import info.tiamed.MoeWallpaper.util.HttpUtil;
 
 public class SearchResults extends Results implements HttpUtil.updateData<SearchData.ResultsBean>, DataRequest.RequestCallback<SearchData.ResultsBean> {
     private final String query;
@@ -12,18 +18,14 @@ public class SearchResults extends Results implements HttpUtil.updateData<Search
     public SearchResults(String query, int page) {
         this.query = query;
         this.page = page;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                query();
-            }
-        });
+        EventBus.getDefault().register(this);
+        query();
     }
 
     @Override
     public void onFinish(List<SearchData.ResultsBean> data) {
         updateData(data);
-        Log.d("HttpUtil", "get success");
+        EventBus.getDefault().post(bundle);
     }
 
     @Override
@@ -34,7 +36,9 @@ public class SearchResults extends Results implements HttpUtil.updateData<Search
     @Override
     public void updateData(List<SearchData.ResultsBean> data) {
         urls.clear();
+        urls_thumb.clear();
         titles.clear();
+        data.forEach(datum -> urls_thumb.add(datum.getUrls().getThumb()));
         data.forEach(datum -> urls.add(datum.getUrls().getRegular()));
         data.forEach(datum -> titles.add(datum.getUser().getUsername()));
         setBundle(urls, titles);
@@ -44,5 +48,9 @@ public class SearchResults extends Results implements HttpUtil.updateData<Search
     public void query() {
         DataRequest dr = new DataRequest();
         dr.searchList(this, query, page);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPostBundle(Bundle bundle) {
     }
 }

@@ -5,6 +5,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.gyf.barlibrary.ImmersionBar;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -12,17 +22,10 @@ import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.gyf.barlibrary.ImmersionBar;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.fragment.MainFragment;
 import info.tiamed.MoeWallpaper.util.HttpUtil;
 import info.tiamed.MoeWallpaper.util.InternetConnection;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     int page = 1;
     ArrayList<String> urls = new ArrayList<>();
     ArrayList<String> titles = new ArrayList<>();
+    HttpUtil util = new HttpUtil();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +52,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        Bundle bundle = new HttpUtil().get(1);
-        EventBus.getDefault().post(bundle);
+        util.get(1);
         replaceFragment(new MainFragment());
         initSearchView();
     }
@@ -93,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (InternetConnection.checkConnection(MainActivity.this)) {
-                    Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                     intent.putExtra("query", query);
                     startActivity(intent);
                 }
@@ -113,13 +116,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSearchViewClosed() {
-
+                util.get(1);
             }
         });
     }
 
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onPostEvent(Bundle bundle) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPostBundle(Bundle bundle) {
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

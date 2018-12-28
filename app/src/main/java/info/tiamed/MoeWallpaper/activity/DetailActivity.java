@@ -5,19 +5,21 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.gyf.barlibrary.ImmersionBar;
+
+import java.util.ArrayList;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.gyf.barlibrary.ImmersionBar;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.adapter.SectionsPagerAdapter;
 import info.tiamed.MoeWallpaper.util.WallpaperLoader;
-
-import java.util.ArrayList;
 
 @SuppressLint("ParserError")
 public class DetailActivity extends AppCompatActivity {
@@ -46,17 +48,24 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
         mContext = this;
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), urls, titles);
-        mViewPager = findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.addOnPageChangeListener(new SimpleOnPageChangeListener() {
-            public void onPageSelected(int position) {
-                mCurrentFragment = position;
-            }
-        });
-        mViewPager.setCurrentItem(position);
-
-        mSectionsPagerAdapter.notifyDataSetChanged();
+        if (urls != null && urls.size() != 0) {
+            Log.d("detail activity", urls.toString());
+            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), urls, titles);
+            mViewPager = findViewById(R.id.pager);
+            mViewPager.setAdapter(mSectionsPagerAdapter);
+            mViewPager.addOnPageChangeListener(new SimpleOnPageChangeListener() {
+                public void onPageSelected(int position) {
+                    mCurrentFragment = position;
+                }
+            });
+            mViewPager.setCurrentItem(position);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    mSectionsPagerAdapter.notifyDataSetChanged();
+                }
+            });
+        }
 
     }
 

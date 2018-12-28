@@ -1,17 +1,19 @@
 package info.tiamed.MoeWallpaper.activity;
 
 import android.os.Bundle;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.fragment.GalleryFragment;
 import info.tiamed.MoeWallpaper.util.HttpUtil;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -24,7 +26,8 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         EventBus.getDefault().register(this);
         String query = getIntent().getStringExtra("query");
-        Bundle bundle = new HttpUtil().search(query, 1);
+        HttpUtil util = new HttpUtil();
+        Bundle bundle = util.search(query, 1);
         GalleryFragment galleryFragment = new GalleryFragment();
         galleryFragment.setArguments(bundle);
         replaceFragment(galleryFragment);
@@ -36,13 +39,21 @@ public class SearchActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HttpUtil util = new HttpUtil();
+        util.get(1);
+    }
+
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.search_layout, fragment);
         transaction.commit();
     }
 
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onPostEvent(Bundle bundle) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPostBundle(Bundle bundle) {
+
     }
 }
