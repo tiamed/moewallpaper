@@ -7,10 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.airbnb.lottie.LottieAnimationView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import com.airbnb.lottie.LottieAnimationView;
 import info.tiamed.MoeWallpaper.R;
 
 public class WebviewFragment extends Fragment {

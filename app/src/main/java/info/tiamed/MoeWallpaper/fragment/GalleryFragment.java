@@ -2,7 +2,6 @@ package info.tiamed.MoeWallpaper.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,19 +26,24 @@ import info.tiamed.MoeWallpaper.util.HttpUtil;
 
 public class GalleryFragment extends Fragment {
 
+    static int page = 1;
+    ArrayList<String> urls = new ArrayList<String>();
+    ArrayList<String> titles = new ArrayList<String>();
+    ArrayList<String> urls_thumb = new ArrayList<String>();
+    HttpUtil util = new HttpUtil();
     private RecyclerView mImageRecycler;
     private PaletteGridAdapter mPaletteGridAdapter;
     private Context mContext;
-    ArrayList<String> urls = new ArrayList<String>();
-    static int page = 1;
-    ArrayList<String> titles = new ArrayList<String>();
-    ArrayList<String> urls_thumb = new ArrayList<String>();
+    private String tag = "";
+    private String query = "";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View galleryView = inflater.inflate(R.layout.fragment_gallery, null);
         EventBus.getDefault().register(this);
+        this.tag = getArguments().getString("tag");
+        this.query = getArguments().getString("query");
         mContext = getActivity();
         mImageRecycler = galleryView.findViewById(R.id.gallery_item);
         mPaletteGridAdapter = new PaletteGridAdapter(getActivity(), urls_thumb, urls, titles);
@@ -55,8 +59,11 @@ public class GalleryFragment extends Fragment {
                     @Override
                     public void onLoadMore(LoadMoreAdapter.Enabled enabled) {
                         page += 1;
-                        HttpUtil util = new HttpUtil();
-                        Bundle bundle = util.get(page);
+                        if (tag == "get") {
+                            util.get(page);
+                        } else {
+                            util.search(query, page);
+                        }
                     }
                 })
                 .into(mImageRecycler);
@@ -72,24 +79,31 @@ public class GalleryFragment extends Fragment {
             ArrayList<String> urls_thumb_ = bundle.getStringArrayList("urls_thumb");
             ArrayList<String> urls_ = bundle.getStringArrayList("urls");
             ArrayList<String> titles_ = bundle.getStringArrayList("titles");
-            if (urls != urls_) {
+            String tag_ = bundle.getString("tag");
+            if (urls != urls_ && tag == tag_) {
                 urls.addAll(urls_);
                 urls_thumb.addAll(urls_thumb_);
                 titles.addAll(titles_);
-            }
-            if (urls.size() != 0 && titles.size() != 0 && mPaletteGridAdapter != null) {
-                Log.e("GalleryFragment", urls.toString());
-                Log.e("GalleryFragment inside", urls.toString());
-                mPaletteGridAdapter.setData(urls_thumb, urls, titles);
-
-                Log.e("gallery fragment new thread", urls.toString());
-                mPaletteGridAdapter.notifyDataSetChanged();
-
+                if (urls.size() != 0 && titles.size() != 0 && mPaletteGridAdapter != null) {
+                    mPaletteGridAdapter.setData(urls_thumb, urls, titles);
+                    mPaletteGridAdapter.notifyDataSetChanged();
+                }
             }
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPostEvent(int i) {
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onQuery(String query) {
+        this.query = query;
+    }
+
+    public void clear() {
+        urls.clear();
+        urls_thumb.clear();
+        titles.clear();
     }
 }

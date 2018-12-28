@@ -12,6 +12,7 @@ import java.util.List;
 import info.tiamed.MoeWallpaper.util.HttpUtil;
 
 public class SourceResults extends Results implements HttpUtil.updateData<SourceData>, DataRequest.RequestCallback<SourceData> {
+    private final String tag = "get";
     private final int page;
 
     public SourceResults(int page) {
@@ -39,7 +40,7 @@ public class SourceResults extends Results implements HttpUtil.updateData<Source
         data.forEach(datum -> urls_thumb.add(datum.getUrls().getThumb()));
         data.forEach(datum -> urls.add(datum.getUrls().getRegular()));
         data.forEach(datum -> titles.add(datum.getUser().getUsername()));
-        this.setBundle(urls, titles);
+        this.setBundle(urls, titles, tag);
     }
 
     @Override

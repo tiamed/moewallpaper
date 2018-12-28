@@ -12,6 +12,7 @@ import java.util.List;
 import info.tiamed.MoeWallpaper.util.HttpUtil;
 
 public class SearchResults extends Results implements HttpUtil.updateData<SearchData.ResultsBean>, DataRequest.RequestCallback<SearchData.ResultsBean> {
+    private final String tag = "search";
     private final String query;
     private final int page;
 
@@ -41,7 +42,7 @@ public class SearchResults extends Results implements HttpUtil.updateData<Search
         data.forEach(datum -> urls_thumb.add(datum.getUrls().getThumb()));
         data.forEach(datum -> urls.add(datum.getUrls().getRegular()));
         data.forEach(datum -> titles.add(datum.getUser().getUsername()));
-        setBundle(urls, titles);
+        setBundle(urls, titles, tag);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class SearchResults extends Results implements HttpUtil.updateData<Search
         dr.searchList(this, query, page);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onPostBundle(Bundle bundle) {
     }
 }

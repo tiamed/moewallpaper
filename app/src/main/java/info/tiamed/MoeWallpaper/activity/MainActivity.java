@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSearchViewClosed() {
-                util.get(1);
             }
         });
     }
@@ -129,6 +128,5 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPostEvent(int i) {
         page += 1;
-        Log.e("Main", "page: " + page);
     }
 }

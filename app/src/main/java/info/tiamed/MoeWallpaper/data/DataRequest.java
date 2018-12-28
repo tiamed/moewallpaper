@@ -43,7 +43,6 @@ public class DataRequest {
 
             @Override
             public void onFailure(Call<List<SourceData>> call, Throwable t) {
-                Log.e("DataRequest", "Failed");
             }
         });
     }

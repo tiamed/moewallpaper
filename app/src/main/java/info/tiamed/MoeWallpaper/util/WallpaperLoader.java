@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -36,7 +35,6 @@ public class WallpaperLoader extends AsyncTask<Integer, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Integer... params) {
         try {
-            Log.e("wallpaperloader", params[0].toString());
             Bitmap b = Glide.with(mContext)
                     .asBitmap()
                     .load(urls.get(params[0]))
@@ -44,7 +42,6 @@ public class WallpaperLoader extends AsyncTask<Integer, Void, Boolean> {
                             .format(DecodeFormat.PREFER_ARGB_8888)
                             .override(Target.SIZE_ORIGINAL))
                     .submit().get();
-            Log.e("wallpaperloader, bitmap: ", b.toString());
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(mContext);
             try {
                 wallpaperManager.setBitmap(b);

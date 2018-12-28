@@ -19,18 +19,23 @@ public class SearchActivity extends AppCompatActivity {
 
     ArrayList<String> urls = new ArrayList<>();
     ArrayList<String> titles = new ArrayList<>();
+    HttpUtil util = new HttpUtil();
+    Bundle bundle = new Bundle();
+    String query = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         EventBus.getDefault().register(this);
-        String query = getIntent().getStringExtra("query");
-        HttpUtil util = new HttpUtil();
-        Bundle bundle = util.search(query, 1);
-        GalleryFragment galleryFragment = new GalleryFragment();
-        galleryFragment.setArguments(bundle);
-        replaceFragment(galleryFragment);
+        query = getIntent().getStringExtra("query");
+        EventBus.getDefault().post(query);
+        util.search(query, 1);
+        GalleryFragment searchFragment = new GalleryFragment();
+        bundle.putString("tag", "search");
+        bundle.putString("query", query);
+        searchFragment.setArguments(bundle);
+        replaceFragment(searchFragment);
     }
 
     @Override
@@ -40,10 +45,9 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        HttpUtil util = new HttpUtil();
-        util.get(1);
+    protected void onPause() {
+        super.onPause();
+        this.finish();
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -52,8 +56,7 @@ public class SearchActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPostBundle(Bundle bundle) {
-
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onQuery(String query) {
     }
 }
