@@ -6,8 +6,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import info.tiamed.MoeWallpaper.R;
 
 import java.io.IOException;
@@ -30,8 +34,15 @@ public class WallpaperLoader extends AsyncTask<Integer, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Integer... params) {
         try {
-            Bitmap b = Glide.with(mContext).asBitmap().load(urls.get(params[0])).submit().get();
-            b = b.copy(Bitmap.Config.ARGB_8888, true);
+            Log.e("wallpaperloader", params[0].toString());
+            Bitmap b = Glide.with(mContext)
+                    .asBitmap()
+                    .load(urls.get(params[0]))
+                    .apply(new RequestOptions()
+                            .format(DecodeFormat.PREFER_ARGB_8888)
+                            .override(Target.SIZE_ORIGINAL))
+                    .submit().get();
+            Log.e("wallpaperloader, bitmap: ", b.toString());
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(mContext);
             try {
                 wallpaperManager.setBitmap(b);

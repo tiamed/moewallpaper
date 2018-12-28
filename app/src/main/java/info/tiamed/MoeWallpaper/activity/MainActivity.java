@@ -1,20 +1,10 @@
 package info.tiamed.MoeWallpaper.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.gyf.barlibrary.ImmersionBar;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -22,15 +12,19 @@ import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.gyf.barlibrary.ImmersionBar;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import info.tiamed.MoeWallpaper.R;
-import info.tiamed.MoeWallpaper.data.DataRequest;
-import info.tiamed.MoeWallpaper.data.SearchData;
-import info.tiamed.MoeWallpaper.data.SourceData;
-import info.tiamed.MoeWallpaper.fragment.GalleryFragment;
 import info.tiamed.MoeWallpaper.fragment.MainFragment;
+import info.tiamed.MoeWallpaper.util.HttpUtil;
 import info.tiamed.MoeWallpaper.util.InternetConnection;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
-public class MainActivity extends AppCompatActivity implements DataRequest.RequsetCallback<SourceData> {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
 
 
     @BindView(R.id.search_view)
@@ -54,11 +48,10 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        getList();
-
+        Bundle bundle = new HttpUtil().get(1);
+        EventBus.getDefault().post(bundle);
         replaceFragment(new MainFragment());
         initSearchView();
-
     }
 
     @Override
@@ -100,11 +93,11 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (InternetConnection.checkConnection(MainActivity.this)) {
-                    replaceFragment(new GalleryFragment());
-                    DataRequest dr = new DataRequest();
-                    dr.searchList(MainActivity.this, query, page);
+                    Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                    intent.putExtra("query", query);
+                    startActivity(intent);
                 }
-                return false;
+                return true;
             }
 
             @Override
@@ -120,39 +113,18 @@ public class MainActivity extends AppCompatActivity implements DataRequest.Requs
 
             @Override
             public void onSearchViewClosed() {
-                getList();
+
             }
         });
     }
 
-    public void getList() {
-        if (InternetConnection.checkConnection(this)) {
-            DataRequest dr = new DataRequest();
-            dr.getWallpaperList(this, page);
-        }
-    }
-
-    @Override
-    public void onFinish(List<SourceData> data, List<SearchData.ResultsBean> search) {
-        if (data != null) {
-            data.forEach(datum -> urls.add(datum.getUrls().getThumb()));
-            data.forEach(datum -> titles.add(datum.getUser().getUsername()));
-        } else if (search != null) {
-            search.forEach(result -> urls.add(result.getUrls().getThumb()));
-            search.forEach(result -> titles.add(result.getUser().getUsername()));
-        }
-        Bundle bundle = new Bundle();
-        bundle.putStringArrayList("urls", urls);
-        bundle.putStringArrayList("titles", titles);
-        EventBus.getDefault().post(bundle);
-    }
-
-    @Override
-    public void onError(String msg) {
-        Log.e("source data", "failed");
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onPostEvent(Bundle bundle) {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPostEvent(Bundle bundle) {
+    public void onPostEvent(int i) {
+        page += 1;
+        Log.e("Main", "page: " + page);
     }
 }

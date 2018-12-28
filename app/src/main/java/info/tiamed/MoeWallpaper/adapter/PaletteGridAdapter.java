@@ -11,15 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
-
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.activity.DetailActivity;
+
+import java.util.ArrayList;
 
 public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.PaletteGridViewHolder> {
 
@@ -55,12 +53,14 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
                     Log.d("PaletteGrid on create", "item clicked :"+ v.getTag());
-                    int position = (int) v.getTag();
-                    Intent detailIntent = new Intent(itemView.getContext(), DetailActivity.class);
-                    detailIntent.putExtra("pos", position)
-                            .putExtra("urls", urls)
-                            .putExtra("titles", titles);
-                    itemView.getContext().startActivity(detailIntent);
+                    if (v.getTag() != null) {
+                        int position = (int) v.getTag();
+                        Intent detailIntent = new Intent(itemView.getContext(), DetailActivity.class);
+                        detailIntent.putExtra("pos", position)
+                                .putExtra("urls", urls)
+                                .putExtra("titles", titles);
+                        itemView.getContext().startActivity(detailIntent);
+                    }
                 }
             }
         });
@@ -92,7 +92,7 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
 
     @Override
     public int getItemCount() {
-        return urls.size();
+        return titles.size();
     }
 
     private void setPalette(final PaletteGridViewHolder holder, final int position) {
@@ -130,8 +130,6 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
     }
 
     public void setData(ArrayList<String> urls, ArrayList<String> titles) {
-        this.urls.clear();
-        this.titles.clear();
         this.urls = urls;
         this.titles = titles;
     }

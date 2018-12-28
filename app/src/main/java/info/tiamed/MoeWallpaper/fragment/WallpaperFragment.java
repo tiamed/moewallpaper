@@ -7,12 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
+import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
-
-import androidx.fragment.app.Fragment;
 
 public class WallpaperFragment extends Fragment {
     public static final String ARG_SECTION_NUMBER = "section_number";
@@ -33,7 +34,12 @@ public class WallpaperFragment extends Fragment {
         img.setLayoutParams(new ViewGroup.LayoutParams
                 (ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         holder.addView(img);
-        Glide.with(img.getContext()).load(urls.get(position)).into(img);
+        Glide.with(img.getContext())
+                .load(urls.get(position))
+                .apply(new RequestOptions()
+                        .format(DecodeFormat.PREFER_ARGB_8888)
+                        .override(Target.SIZE_ORIGINAL))
+                .into(img);
         img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         return holder;
     }

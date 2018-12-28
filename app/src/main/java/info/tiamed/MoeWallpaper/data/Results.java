@@ -1,0 +1,21 @@
+package info.tiamed.MoeWallpaper.data;
+
+import android.os.Bundle;
+
+import java.util.ArrayList;
+
+public class Results {
+    Bundle bundle = new Bundle();
+    ArrayList<String> urls = new ArrayList<>();
+    ArrayList<String> titles = new ArrayList<>();
+
+    public Bundle getBundle() {
+        return bundle;
+    }
+
+    public void setBundle(ArrayList<String> urls, ArrayList<String> titles) {
+        bundle.clear();
+        bundle.putStringArrayList("urls", urls);
+        bundle.putStringArrayList("titles", titles);
+    }
+}

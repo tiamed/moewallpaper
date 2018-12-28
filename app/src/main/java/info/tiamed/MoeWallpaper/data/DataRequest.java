@@ -1,14 +1,13 @@
 package info.tiamed.MoeWallpaper.data;
 
 import android.util.Log;
-
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import java.util.List;
 
 public class DataRequest {
     public static final String baseurl = "https://api.unsplash.com/";
@@ -18,26 +17,26 @@ public class DataRequest {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    public void getWallpaperList(final RequsetCallback requsetCallback, int page) {
+    public void getWallpaperList(final RequestCallback requestCallback, int page) {
         ApiService mApiService = retro.create(ApiService.class);
         Call<List<SourceData>> mCall = mApiService.getData(client_id, page, 30, "popular");
-        get(requsetCallback, mCall);
+        get(requestCallback, mCall);
     }
 
-    public void searchList(final RequsetCallback requsetCallback, String query, int page) {
+    public void searchList(final RequestCallback requestCallback, String query, int page) {
         ApiService mApiService = retro.create(ApiService.class);
         Call<SearchData> mCall = mApiService.searchData(client_id, page, 30, query);
-        search(requsetCallback, mCall);
+        search(requestCallback, mCall);
     }
 
-    private void get(RequsetCallback requsetCallback, Call<List<SourceData>> mCall) {
+    private void get(RequestCallback requestCallback, Call<List<SourceData>> mCall) {
         mCall.enqueue(new Callback<List<SourceData>>() {
             @Override
             public void onResponse(Call<List<SourceData>> call, Response<List<SourceData>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    requsetCallback.onFinish(response.body(), null);
+                    requestCallback.onFinish(response.body());
                 } else {
-                    requsetCallback.onError("error");
+                    requestCallback.onError("error");
                 }
             }
 
@@ -48,14 +47,14 @@ public class DataRequest {
         });
     }
 
-    private void search(RequsetCallback requsetCallback, Call<SearchData> mCall) {
+    private void search(RequestCallback requestCallback, Call<SearchData> mCall) {
         mCall.enqueue(new Callback<SearchData>() {
             @Override
             public void onResponse(Call<SearchData> call, Response<SearchData> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    requsetCallback.onFinish(null, response.body().getResults());
+                    requestCallback.onFinish(response.body().getResults());
                 } else {
-                    requsetCallback.onError("error");
+                    requestCallback.onError("error");
                 }
             }
 
@@ -67,8 +66,8 @@ public class DataRequest {
 
     }
 
-    public interface RequsetCallback<T> {
-        void onFinish(List<SourceData> data, List<SearchData.ResultsBean> search);
+    public interface RequestCallback<T> {
+        void onFinish(List<T> data);
 
         void onError(String msg);
     }
