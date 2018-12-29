@@ -1,14 +1,15 @@
 package info.tiamed.MoeWallpaper.data;
 
 import android.util.Log;
+
+import java.util.List;
+
 import info.tiamed.MoeWallpaper.util.ApiService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.util.List;
 
 class DataRequest {
     private static final String baseurl = "https://api.unsplash.com/";

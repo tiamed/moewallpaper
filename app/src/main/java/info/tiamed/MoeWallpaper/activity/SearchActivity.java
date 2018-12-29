@@ -1,6 +1,15 @@
 package info.tiamed.MoeWallpaper.activity;
 
 import android.os.Bundle;
+
+import com.gyf.barlibrary.ImmersionBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -8,15 +17,9 @@ import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.gyf.barlibrary.ImmersionBar;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.fragment.GalleryFragment;
 import info.tiamed.MoeWallpaper.util.HttpUtil;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_search)

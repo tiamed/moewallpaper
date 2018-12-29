@@ -2,12 +2,14 @@ package info.tiamed.MoeWallpaper.data;
 
 import android.os.Bundle;
 import android.util.Log;
-import info.tiamed.MoeWallpaper.util.HttpUtil;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
+
+import info.tiamed.MoeWallpaper.util.HttpUtil;
 
 public class SourceResults extends Results implements HttpUtil.updateData<SourceData>, DataRequest.RequestCallback<SourceData> {
     private final String tag = "get";

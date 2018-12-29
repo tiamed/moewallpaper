@@ -5,6 +5,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.gyf.barlibrary.ImmersionBar;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -12,15 +20,10 @@ import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.gyf.barlibrary.ImmersionBar;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.fragment.MainFragment;
 import info.tiamed.MoeWallpaper.util.HttpUtil;
 import info.tiamed.MoeWallpaper.util.InternetConnection;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends AppCompatActivity {
 

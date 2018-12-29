@@ -5,21 +5,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 import com.github.nukc.LoadMoreWrapper.LoadMoreAdapter;
 import com.github.nukc.LoadMoreWrapper.LoadMoreWrapper;
-import info.tiamed.MoeWallpaper.R;
-import info.tiamed.MoeWallpaper.adapter.PaletteGridAdapter;
-import info.tiamed.MoeWallpaper.util.HttpUtil;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import info.tiamed.MoeWallpaper.R;
+import info.tiamed.MoeWallpaper.adapter.PaletteGridAdapter;
+import info.tiamed.MoeWallpaper.util.HttpUtil;
 
 public class GalleryFragment extends Fragment {
 

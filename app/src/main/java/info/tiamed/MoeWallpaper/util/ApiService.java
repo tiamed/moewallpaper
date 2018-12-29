@@ -1,12 +1,12 @@
 package info.tiamed.MoeWallpaper.util;
 
+import java.util.List;
+
 import info.tiamed.MoeWallpaper.data.SearchData;
 import info.tiamed.MoeWallpaper.data.SourceData;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-
-import java.util.List;
 
 public interface ApiService {
     @GET("photos")

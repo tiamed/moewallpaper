@@ -1,10 +1,11 @@
 package info.tiamed.MoeWallpaper.util;
 
 import android.os.Bundle;
-import info.tiamed.MoeWallpaper.data.SearchResults;
-import info.tiamed.MoeWallpaper.data.SourceResults;
 
 import java.util.List;
+
+import info.tiamed.MoeWallpaper.data.SearchResults;
+import info.tiamed.MoeWallpaper.data.SourceResults;
 
 public class HttpUtil {
 

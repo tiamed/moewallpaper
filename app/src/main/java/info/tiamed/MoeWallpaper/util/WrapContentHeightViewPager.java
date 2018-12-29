@@ -3,6 +3,7 @@ package info.tiamed.MoeWallpaper.util;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+
 import androidx.viewpager.widget.ViewPager;
 
 public class WrapContentHeightViewPager extends ViewPager {
