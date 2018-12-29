@@ -23,26 +23,21 @@ import info.tiamed.MoeWallpaper.activity.DetailActivity;
 
 public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.PaletteGridViewHolder> {
 
-    private static Context mcontext;
+    private static Context context;
     private OnItemClickListener mOnItemClickListener = null;
     private ArrayList<String> urls_thumb;
     private ArrayList<String> urls;
     private ArrayList<String> titles;
 
-    public PaletteGridAdapter(Context mContext, ArrayList<String> urls_thumb, ArrayList<String> urls, ArrayList<String> titles) {
-        setMcontext(mContext);
+    public PaletteGridAdapter(Context context, ArrayList<String> urls_thumb, ArrayList<String> urls, ArrayList<String> titles) {
+        PaletteGridAdapter.context = context;
         this.urls = urls;
         this.urls_thumb = urls_thumb;
         this.titles = titles;
-//        EventBus.getDefault().register(this);
     }
 
-    public static Context getMcontext() {
-        return mcontext;
-    }
-
-    public static void setMcontext(Context mcontext) {
-        PaletteGridAdapter.mcontext = mcontext;
+    public static Context getcontext() {
+        return context;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -56,10 +51,10 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
             @Override
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
-                    Log.d("PaletteGrid on create", "item clicked :"+ v.getTag());
+                    Log.d("PaletteGrid on create", "item clicked :" + v.getTag());
                     if (v.getTag() != null) {
                         int position = (int) v.getTag();
-                        Intent detailIntent = new Intent(itemView.getContext(), DetailActivity.class);
+                        Intent detailIntent = new Intent(context, DetailActivity.class);
                         detailIntent.putExtra("pos", position)
                                 .putExtra("urls", urls)
                                 .putExtra("titles", titles);
@@ -73,7 +68,7 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
 
     @Override
     public void onBindViewHolder(final PaletteGridViewHolder holder, final int position) {
-
+        holder.itemView.setTag(position);
         if (urls_thumb.size() != 0) {
             Glide.with(holder.mIvPic.getContext()).load(urls_thumb.get(position)).into(holder.mIvPic);
             holder.mTvTitle.setText(titles.get(position));
@@ -102,8 +97,6 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
     private void setPalette(final PaletteGridViewHolder holder, final int position) {
         BitmapDrawable bitmapDrawable = (BitmapDrawable) holder.mIvPic.getDrawable();
         Bitmap bitmap = bitmapDrawable.getBitmap();
-        holder.itemView.setTag(position);
-
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
             @Override
             public void onGenerated(Palette palette) {

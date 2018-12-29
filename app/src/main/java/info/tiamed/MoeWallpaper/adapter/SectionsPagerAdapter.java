@@ -24,7 +24,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int i) {
         Fragment fragment = new WallpaperFragment();
         Bundle args = new Bundle();
-        Log.d("getItem", "section number "+ (i));
+        Log.d("getItem", "section number " + (i));
         args.putInt(WallpaperFragment.ARG_SECTION_NUMBER, i);
         args.putStringArrayList("urls", urls);
         fragment.setArguments(args);

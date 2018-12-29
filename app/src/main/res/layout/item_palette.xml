@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/ivPic"
-        style="@style/ivpic" />
+        style="@style/ivpic"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,14 +15,14 @@
         <TextView
             android:id="@+id/tvTitle"
             style="@style/tvtitle"
-            android:text="uu" />
+            android:text="uu"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/tvTitle"
-            android:src="@drawable/format_paint_black" />
+            android:src="@drawable/format_paint_black"/>
     </RelativeLayout>
 
 </RelativeLayout>

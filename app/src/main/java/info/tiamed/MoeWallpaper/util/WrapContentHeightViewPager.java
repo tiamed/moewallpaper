@@ -3,7 +3,6 @@ package info.tiamed.MoeWallpaper.util;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-
 import androidx.viewpager.widget.ViewPager;
 
 public class WrapContentHeightViewPager extends ViewPager {
@@ -21,7 +20,7 @@ public class WrapContentHeightViewPager extends ViewPager {
      * Constructor
      *
      * @param context the context
-     * @param attrs the attribute set
+     * @param attrs   the attribute set
      */
     public WrapContentHeightViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,8 +44,7 @@ public class WrapContentHeightViewPager extends ViewPager {
      * Determines the height of this view
      *
      * @param measureSpec A measureSpec packed into an int
-     * @param view the base view with already measured height
-     *
+     * @param view        the base view with already measured height
      * @return The height of the view, honoring constraints from measureSpec
      */
     private int measureHeight(int measureSpec, View view) {

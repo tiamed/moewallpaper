@@ -7,16 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
-import com.airbnb.lottie.LottieAnimationView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import com.airbnb.lottie.LottieAnimationView;
 import info.tiamed.MoeWallpaper.R;
 
 public class WebviewFragment extends Fragment {
-    private static final String TAG = "Webview";
     public static final String URL = "javascript:(function() { " +
             "var list = document.getElementById(\"app\").childNodes[0];\n" +
             "for (i in [...Array(6).keys()]) {\n" +
@@ -24,6 +21,7 @@ public class WebviewFragment extends Fragment {
             "}\n" +
             "list.childNodes[0].childNodes[0].remove();\n" +
             "list.childNodes[0].childNodes[0].style.marginTop = '1rem';})()";
+    private static final String TAG = "Webview";
 
     @Nullable
     @Override
