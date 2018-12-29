@@ -5,21 +5,19 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.gyf.barlibrary.ImmersionBar;
-
-import java.util.ArrayList;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.gyf.barlibrary.ImmersionBar;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.adapter.SectionsPagerAdapter;
 import info.tiamed.MoeWallpaper.util.WallpaperLoader;
+
+import java.util.ArrayList;
 
 @SuppressLint("ParserError")
 public class DetailActivity extends AppCompatActivity {
@@ -27,7 +25,7 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.fab)
     FloatingActionButton fab;
     private static final int MENU_APPLY = Menu.FIRST;
-    private static Context mContext;
+    private static Context context;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
     private int mCurrentFragment;
@@ -47,7 +45,7 @@ public class DetailActivity extends AppCompatActivity {
                 .init();
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-        mContext = this;
+        context = this;
         if (urls != null && urls.size() != 0) {
             Log.d("detail activity", urls.toString());
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), urls, titles);
@@ -71,7 +69,7 @@ public class DetailActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab)
     public void onClick() {
-        new WallpaperLoader(mContext, urls).execute(mCurrentFragment);
+        new WallpaperLoader(context, urls).execute(mCurrentFragment);
         Log.d("FAB", "clicked");
     }
 

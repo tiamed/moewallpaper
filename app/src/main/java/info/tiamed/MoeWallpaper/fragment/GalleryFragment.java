@@ -5,24 +5,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.github.nukc.LoadMoreWrapper.LoadMoreAdapter;
-import com.github.nukc.LoadMoreWrapper.LoadMoreWrapper;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.github.nukc.LoadMoreWrapper.LoadMoreAdapter;
+import com.github.nukc.LoadMoreWrapper.LoadMoreWrapper;
 import info.tiamed.MoeWallpaper.R;
 import info.tiamed.MoeWallpaper.adapter.PaletteGridAdapter;
 import info.tiamed.MoeWallpaper.util.HttpUtil;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
 
 public class GalleryFragment extends Fragment {
 
@@ -33,7 +30,7 @@ public class GalleryFragment extends Fragment {
     HttpUtil util = new HttpUtil();
     private RecyclerView mImageRecycler;
     private PaletteGridAdapter mPaletteGridAdapter;
-    private Context mContext;
+    private Context context;
     private String tag = "";
     private String query = "";
 
@@ -44,10 +41,10 @@ public class GalleryFragment extends Fragment {
         EventBus.getDefault().register(this);
         this.tag = getArguments().getString("tag");
         this.query = getArguments().getString("query");
-        mContext = getActivity();
+        context = getActivity();
         mImageRecycler = galleryView.findViewById(R.id.gallery_item);
-        mPaletteGridAdapter = new PaletteGridAdapter(getActivity(), urls_thumb, urls, titles);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 2);
+        mPaletteGridAdapter = new PaletteGridAdapter(context, urls_thumb, urls, titles);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
         mImageRecycler.setLayoutManager(gridLayoutManager);
         mImageRecycler.setOnTouchListener((v, event) -> {
             return false;
@@ -80,7 +77,7 @@ public class GalleryFragment extends Fragment {
             ArrayList<String> urls_ = bundle.getStringArrayList("urls");
             ArrayList<String> titles_ = bundle.getStringArrayList("titles");
             String tag_ = bundle.getString("tag");
-            if (urls != urls_ && tag == tag_) {
+            if (urls != urls_ && tag.equals(tag_)) {
                 urls.addAll(urls_);
                 urls_thumb.addAll(urls_thumb_);
                 titles.addAll(titles_);
@@ -90,10 +87,6 @@ public class GalleryFragment extends Fragment {
                 }
             }
         }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPostEvent(int i) {
     }
 
     @Subscribe(threadMode = ThreadMode.ASYNC)

@@ -1,30 +1,30 @@
 package info.tiamed.MoeWallpaper.data;
 
 import android.util.Log;
-
-import java.util.List;
-
+import info.tiamed.MoeWallpaper.util.ApiService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class DataRequest {
-    public static final String baseurl = "https://api.unsplash.com/";
+import java.util.List;
+
+class DataRequest {
+    private static final String baseurl = "https://api.unsplash.com/";
     private final String client_id = "a1999c86fdd271e5641fe7fa033d1c172145a68250d04e763e7f53bd2eb85b02";
-    Retrofit retro = new Retrofit.Builder()
+    private Retrofit retro = new Retrofit.Builder()
             .baseUrl(baseurl)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    public void getWallpaperList(final RequestCallback requestCallback, int page) {
+    void getWallpaperList(final RequestCallback requestCallback, int page) {
         ApiService mApiService = retro.create(ApiService.class);
         Call<List<SourceData>> mCall = mApiService.getData(client_id, page, 30, "popular");
         get(requestCallback, mCall);
     }
 
-    public void searchList(final RequestCallback requestCallback, String query, int page) {
+    void searchList(final RequestCallback requestCallback, String query, int page) {
         ApiService mApiService = retro.create(ApiService.class);
         Call<SearchData> mCall = mApiService.searchData(client_id, page, 30, query);
         search(requestCallback, mCall);
@@ -60,7 +60,7 @@ public class DataRequest {
 
             @Override
             public void onFailure(Call<SearchData> call, Throwable t) {
-                Log.e("data request", "failed");
+                Log.e("data request", v"failed");
             }
         });
 
