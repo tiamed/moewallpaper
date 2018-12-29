@@ -30,7 +30,7 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
     private ArrayList<String> titles;
 
     public PaletteGridAdapter(Context context, ArrayList<String> urls_thumb, ArrayList<String> urls, ArrayList<String> titles) {
-        this.context = context;
+        PaletteGridAdapter.context = context;
         this.urls = urls;
         this.urls_thumb = urls_thumb;
         this.titles = titles;
@@ -51,7 +51,7 @@ public class PaletteGridAdapter extends RecyclerView.Adapter<PaletteGridAdapter.
             @Override
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
-                    Log.d("PaletteGrid on create", "item clicked :"+ v.getTag());
+                    Log.d("PaletteGrid on create", "item clicked :" + v.getTag());
                     if (v.getTag() != null) {
                         int position = (int) v.getTag();
                         Intent detailIntent = new Intent(context, DetailActivity.class);

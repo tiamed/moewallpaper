@@ -2,7 +2,6 @@ package info.tiamed.MoeWallpaper.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-
 import androidx.annotation.NonNull;
 
 public class InternetConnection {

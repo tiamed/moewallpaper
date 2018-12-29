@@ -60,7 +60,7 @@ class DataRequest {
 
             @Override
             public void onFailure(Call<SearchData> call, Throwable t) {
-                Log.e("data request", v"failed");
+                Log.e("data request", "failed");
             }
         });
 
@@ -71,8 +71,6 @@ class DataRequest {
 
         void onError(String msg);
     }
-
-
 
 
 }

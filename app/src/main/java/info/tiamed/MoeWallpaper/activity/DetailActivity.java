@@ -22,16 +22,16 @@ import java.util.ArrayList;
 @SuppressLint("ParserError")
 public class DetailActivity extends AppCompatActivity {
 
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
     private static final int MENU_APPLY = Menu.FIRST;
     private static Context context;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
-    private int mCurrentFragment;
-    private int position;
     ArrayList<String> urls = new ArrayList<>();
     ArrayList<String> titles = new ArrayList<>();
+    private int mCurrentFragment;
+    private int position;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
